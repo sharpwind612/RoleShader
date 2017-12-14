@@ -1,0 +1,18 @@
+s Idle False True 0
+s Idle1 False True 0
+s JoystickRun False False 0 0.008:5000001;0.4:5000001
+s Run False False 0 0.008:5000001;0.4:5000001
+s ClickRun False True 0 0.008:5000001;0.4:5000001
+s PathfindingRun False True 0 0.008:5000001;0.4:5000001
+s Chase True True 0 0.008:5000001;0.4:5000001
+s SpecialIdle False True 0
+s Return True True 0 0.008:5000001;0.4:5000001
+s Die False False 0
+s Attack1 True False 0.7 0.3333333:1110101
+s Attack2 True False 0.7 0.3333333:1110201
+s Attack3 True False 0.7 0.3166667:1110301
+s AOE True False 0.7 1.038889:1150101
+s AOE1 True False 0.7
+s EX True False 0.7 0.2666667:1140101;0.2666667:1140102
+s Special False True 0 0.3333333:1130101;0.5666667:1130102
+s GodBless True False 0.7 0.3333333:1110101

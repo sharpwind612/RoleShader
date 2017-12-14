@@ -1,0 +1,301 @@
+fileFormatVersion: 2
+guid: 9a41cfa00f7971c4288e50549a2b234c
+timeCreated: 1505901170
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Bip01
+    100004: Bip01 Head
+    100006: Bip01 L Calf
+    100008: Bip01 L Clavicle
+    100010: Bip01 L Finger0
+    100012: Bip01 L Finger01
+    100014: Bip01 L Finger1
+    100016: Bip01 L Finger11
+    100018: Bip01 L Foot
+    100020: Bip01 L Forearm
+    100022: Bip01 L Hand
+    100024: Bip01 L Thigh
+    100026: Bip01 L Toe0
+    100028: Bip01 L UpperArm
+    100030: Bip01 Neck
+    100032: Bip01 Pelvis
+    100034: Bip01 Prop1
+    100036: Bip01 Prop2
+    100038: Bip01 R Calf
+    100040: Bip01 R Clavicle
+    100042: Bip01 R Finger0
+    100044: Bip01 R Finger01
+    100046: Bip01 R Finger1
+    100048: Bip01 R Finger11
+    100050: Bip01 R Foot
+    100052: Bip01 R Forearm
+    100054: Bip01 R Hand
+    100056: Bip01 R Thigh
+    100058: Bip01 R Toe0
+    100060: Bip01 R UpperArm
+    100062: Bip01 Spine
+    100064: Bip01 Spine1
+    100066: Bone01
+    100068: Bone03
+    100070: Bone049
+    100072: Bone050
+    100074: Bone051
+    100076: Bone052
+    100078: Bone053
+    100080: Bone055
+    100082: Bone056
+    100084: Bone057
+    100086: Bone058
+    100088: Bone059
+    100090: Bone061
+    100092: Bone062
+    100094: Bone063
+    100096: Bone064
+    100098: Bone065
+    100100: Bone066
+    100102: Bone067
+    100104: Bone068
+    100106: Bone069
+    100108: Bone070
+    100110: Bone073
+    100112: Bone073(mirrored)
+    100114: Bone074
+    100116: Bone074(mirrored)
+    100118: Bone075
+    100120: Bone075(mirrored)
+    100122: Bone076
+    100124: Bone076(mirrored)
+    100126: Bone077
+    100128: Bone077(mirrored)
+    100130: Bone084
+    100132: Bone084(mirrored)
+    100134: Bone103
+    100136: Bone104
+    100138: Bone105
+    100140: Bone106
+    100142: Bone107
+    100144: Bone108
+    100146: Bone24
+    100148: Bone25
+    100150: bone003
+    100152: bone004
+    100154: bone005
+    100156: bone006
+    100158: bone007
+    100160: bone017
+    100162: bone018
+    100164: bone022
+    100166: bone023
+    100168: bone024
+    100170: bone027
+    100172: bone028
+    100174: Bone110
+    100176: Bone111
+    100178: Bone112
+    100180: Bone113
+    100182: Bone114
+    100184: Bone116
+    100186: Bone135
+    100188: weapon01
+    100190: weapon02
+    400000: //RootNode
+    400002: Bip01
+    400004: Bip01 Head
+    400006: Bip01 L Calf
+    400008: Bip01 L Clavicle
+    400010: Bip01 L Finger0
+    400012: Bip01 L Finger01
+    400014: Bip01 L Finger1
+    400016: Bip01 L Finger11
+    400018: Bip01 L Foot
+    400020: Bip01 L Forearm
+    400022: Bip01 L Hand
+    400024: Bip01 L Thigh
+    400026: Bip01 L Toe0
+    400028: Bip01 L UpperArm
+    400030: Bip01 Neck
+    400032: Bip01 Pelvis
+    400034: Bip01 Prop1
+    400036: Bip01 Prop2
+    400038: Bip01 R Calf
+    400040: Bip01 R Clavicle
+    400042: Bip01 R Finger0
+    400044: Bip01 R Finger01
+    400046: Bip01 R Finger1
+    400048: Bip01 R Finger11
+    400050: Bip01 R Foot
+    400052: Bip01 R Forearm
+    400054: Bip01 R Hand
+    400056: Bip01 R Thigh
+    400058: Bip01 R Toe0
+    400060: Bip01 R UpperArm
+    400062: Bip01 Spine
+    400064: Bip01 Spine1
+    400066: Bone01
+    400068: Bone03
+    400070: Bone049
+    400072: Bone050
+    400074: Bone051
+    400076: Bone052
+    400078: Bone053
+    400080: Bone055
+    400082: Bone056
+    400084: Bone057
+    400086: Bone058
+    400088: Bone059
+    400090: Bone061
+    400092: Bone062
+    400094: Bone063
+    400096: Bone064
+    400098: Bone065
+    400100: Bone066
+    400102: Bone067
+    400104: Bone068
+    400106: Bone069
+    400108: Bone070
+    400110: Bone073
+    400112: Bone073(mirrored)
+    400114: Bone074
+    400116: Bone074(mirrored)
+    400118: Bone075
+    400120: Bone075(mirrored)
+    400122: Bone076
+    400124: Bone076(mirrored)
+    400126: Bone077
+    400128: Bone077(mirrored)
+    400130: Bone084
+    400132: Bone084(mirrored)
+    400134: Bone103
+    400136: Bone104
+    400138: Bone105
+    400140: Bone106
+    400142: Bone107
+    400144: Bone108
+    400146: Bone24
+    400148: Bone25
+    400150: bone003
+    400152: bone004
+    400154: bone005
+    400156: bone006
+    400158: bone007
+    400160: bone017
+    400162: bone018
+    400164: bone022
+    400166: bone023
+    400168: bone024
+    400170: bone027
+    400172: bone028
+    400174: Bone110
+    400176: Bone111
+    400178: Bone112
+    400180: Bone113
+    400182: Bone114
+    400184: Bone116
+    400186: Bone135
+    400188: weapon01
+    400190: weapon02
+    7400000: Take 001
+    7400002: AOE
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: AOE
+      takeName: 
+      firstFrame: 0
+      lastFrame: 55
+      wrapMode: 1
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 0
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0.56666666
+        functionName: OnEvent
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 1150101
+        messageOptions: 0
+      transformMask: []
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
