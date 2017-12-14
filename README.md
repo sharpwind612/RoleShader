@@ -1,1 +1,1 @@
-关于Unity Standard Shader简化版的测试
+Test for simplified unity standard shader on mobile platform
