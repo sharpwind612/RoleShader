@@ -8,7 +8,14 @@
 		[Gamma] _Metallic("Metallic", Range(0.0, 1.0)) = 0.0 //金属度，这两个值只有在没有_MetallicGlossMap贴图的情况下生效
 		_MetallicGlossMap("Metallic", 2D) = "white" {}	//金属度与光泽度贴图，金属度在r通道上，光泽度在a通道上
 
-		_Realistic("Realistic", Range(0.0, 1.0)) = 0.5
+		//这边的输出 = (PBSResult * _Realistic + Texture * _RawTexture) * _Power
+		//通过控制Realistic来调节物理渲染的影响程度，控制RawTexture来提亮整体的颜色，提高对比度
+		//Realistic = 1，RawTexture = 0时为纯物理渲染的结果
+		//Realistic = 0，RawTexture = 1时为原始贴图的颜色
+		_Realistic("Realistic(物理渲染比例)", Range(0.0, 2.0)) = 1.0
+		_RawTexture("RawTex(原始贴图比例)", Range(0.0, 1.0)) = 1.0
+		_Power("Power(整体提亮)", Range(1.0, 2.0)) = 1.0
+		_SpecularPower("SpecularPower", Range(1.0, 5.0)) = 1.0
 
 		_MixPower ("_Mix Power", Range(0,.9)) = 0
 		_MixColor ("_Mix Color", Color) = (0,0,0,1)
@@ -67,7 +74,9 @@
 			fixed4  _RimColor;
 			fixed   _RimStrength;
 			half _Realistic;
-
+			half _RawTexture;
+			half _Power;
+			half _SpecularPower;
 			//顶点着色器输入
 			struct VertexInput
 			{
@@ -231,23 +240,34 @@
 			//-------------------------------------------------------------------------------------
 			// counterpart for NormalizePerPixelNormal
 			// skips normalization per-vertex and expects normalization to happen per-pixel
+			// 这里不进行标准化而放到逐像素中处理
 			half3 NormalizePerVertexNormal(float3 n) // takes float to avoid overflow
 			{
-#if (SHADER_TARGET < 30) || UNITY_STANDARD_SIMPLE
-				return normalize(n);
-#else
 				return n; // will normalize per-pixel instead
-#endif
 			}
-
+			//像素着色器中对法线进行标准化
 			half3 NormalizePerPixelNormal(half3 n)
 			{
-#if (SHADER_TARGET < 30) || UNITY_STANDARD_SIMPLE
-				return n;
-#else
 				return normalize(n);
-#endif
 			}
+
+//			half3 NormalizePerVertexNormal(float3 n) // takes float to avoid overflow
+//			{
+//#if (SHADER_TARGET < 30) || UNITY_STANDARD_SIMPLE
+//				return normalize(n);
+//#else
+//				return n; // will normalize per-pixel instead
+//#endif
+//			}
+
+//			half3 NormalizePerPixelNormal(half3 n)
+//			{
+//#if (SHADER_TARGET < 30) || UNITY_STANDARD_SIMPLE
+//				return n;
+//#else
+//				return normalize(n);
+//#endif
+//			}
 
 			inline half4 VertexGIForward(VertexInput v, float3 posWorld, half3 normalWorld)
 			{
@@ -258,13 +278,13 @@
 				ambientOrLightmapUV.zw = 0;
 				// Sample light probe for Dynamic objects only (no static or dynamic lightmaps)
 #elif UNITY_SHOULD_SAMPLE_SH
-#ifdef VERTEXLIGHT_ON
-				// Approximated illumination from non-important point lights
-				ambientOrLightmapUV.rgb = Shade4PointLights(
-					unity_4LightPosX0, unity_4LightPosY0, unity_4LightPosZ0,
-					unity_LightColor[0].rgb, unity_LightColor[1].rgb, unity_LightColor[2].rgb, unity_LightColor[3].rgb,
-					unity_4LightAtten0, posWorld, normalWorld);
-#endif
+	#ifdef VERTEXLIGHT_ON
+					// Approximated illumination from non-important point lights
+					ambientOrLightmapUV.rgb = Shade4PointLights(
+						unity_4LightPosX0, unity_4LightPosY0, unity_4LightPosZ0,
+						unity_LightColor[0].rgb, unity_LightColor[1].rgb, unity_LightColor[2].rgb, unity_LightColor[3].rgb,
+						unity_4LightAtten0, posWorld, normalWorld);
+	#endif
 
 				ambientOrLightmapUV.rgb = ShadeSHPerVertex(normalWorld, ambientOrLightmapUV.rgb);
 #endif
@@ -272,7 +292,6 @@
 #ifdef DYNAMICLIGHTMAP_ON
 				ambientOrLightmapUV.zw = v.uv2.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
 #endif
-
 				return ambientOrLightmapUV;
 			}
 
@@ -354,18 +373,18 @@
 				o.tex = TexCoords(v);
 				o.eyeVec = NormalizePerVertexNormal(posWorld.xyz - _WorldSpaceCameraPos);
 				float3 normalWorld = UnityObjectToWorldNormal(v.normal);
-#ifdef _TANGENT_TO_WORLD
+//#ifdef _TANGENT_TO_WORLD
 				float4 tangentWorld = float4(UnityObjectToWorldDir(v.tangent.xyz), v.tangent.w);
 
 				float3x3 tangentToWorld = CreateTangentToWorldPerVertex(normalWorld, tangentWorld.xyz, tangentWorld.w);
 				o.tangentToWorldAndParallax[0].xyz = tangentToWorld[0];
 				o.tangentToWorldAndParallax[1].xyz = tangentToWorld[1];
 				o.tangentToWorldAndParallax[2].xyz = tangentToWorld[2];
-#else
-				o.tangentToWorldAndParallax[0].xyz = 0;
-				o.tangentToWorldAndParallax[1].xyz = 0;
-				o.tangentToWorldAndParallax[2].xyz = normalWorld;
-#endif
+//#else
+				//o.tangentToWorldAndParallax[0].xyz = 0;
+				//o.tangentToWorldAndParallax[1].xyz = 0;
+				//o.tangentToWorldAndParallax[2].xyz = normalWorld;
+//#endif
 				//We need this for shadow receving
 				TRANSFER_SHADOW(o);
 
@@ -424,10 +443,14 @@
 				//return fixed4(gi.light.color, 1.0f);
 				half4 c = UNITY_BRDF_PBS(s.diffColor, s.specColor, s.oneMinusReflectivity, s.oneMinusRoughness, s.normalWorld, -s.eyeVec, gi.light, gi.indirect);
 				//c.rgb += UNITY_BRDF_GI(s.diffColor, s.specColor, s.oneMinusReflectivity, s.oneMinusRoughness, s.normalWorld, -s.eyeVec, occlusion, gi);	//全局光照计算
-				//c.rgb += Emission(i.tex.xy); //自发光
-				half4 tex = half4(s.diffColor, 1.0f);
+				//c.rgb += Emission(i.tex.xy); //自发光0
+
+				half4 tex = tex2D(_MainTex, i.tex.xy);
+				//half4 tex = half4(s.diffColor, 1.0f);//这个颜色经过了
 				//c = lerp(c, tex, _Realistic);
-				c = c + tex * _Realistic;
+
+				//这里如果_Realistic = 0,_Power = 1,则结果为默认的PBS渲染结果
+				c = (c * _Realistic + tex * _RawTexture) * _Power;
 				UNITY_APPLY_FOG(i.fogCoord, c.rgb);
 				return c;
 				//return OutputForward(c, s.alpha);
