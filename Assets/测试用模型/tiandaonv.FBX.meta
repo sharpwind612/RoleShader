@@ -1,0 +1,144 @@
+fileFormatVersion: 2
+guid: 97045a9530ae8a24ca144468680c741b
+timeCreated: 1516242242
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Cuff
+    100002: Cuff_Body
+    100004: Eyelash
+    100006: Eyes
+    100008: Face
+    100010: Head
+    100012: Head_Cloth
+    100014: Head_Hair
+    100016: Head_Hair_Cloth
+    100018: Model_Cloth1
+    100020: Pants_Body
+    100022: Pants_Cloth
+    100024: //RootNode
+    100026: Tunic_Body
+    100028: Tunic_Cloth
+    400000: Cuff
+    400002: Cuff_Body
+    400004: Eyelash
+    400006: Eyes
+    400008: Face
+    400010: Head
+    400012: Head_Cloth
+    400014: Head_Hair
+    400016: Head_Hair_Cloth
+    400018: Model_Cloth1
+    400020: Pants_Body
+    400022: Pants_Cloth
+    400024: //RootNode
+    400026: Tunic_Body
+    400028: Tunic_Cloth
+    2300000: Cuff
+    2300002: Cuff_Body
+    2300004: Eyelash
+    2300006: Eyes
+    2300008: Face
+    2300010: Head
+    2300012: Head_Cloth
+    2300014: Head_Hair
+    2300016: Head_Hair_Cloth
+    2300018: Model_Cloth1
+    2300020: Pants_Body
+    2300022: Pants_Cloth
+    2300024: Tunic_Body
+    2300026: Tunic_Cloth
+    3300000: Cuff
+    3300002: Cuff_Body
+    3300004: Eyelash
+    3300006: Eyes
+    3300008: Face
+    3300010: Head
+    3300012: Head_Cloth
+    3300014: Head_Hair
+    3300016: Head_Hair_Cloth
+    3300018: Model_Cloth1
+    3300020: Pants_Body
+    3300022: Pants_Cloth
+    3300024: Tunic_Body
+    3300026: Tunic_Cloth
+    4300000: Head_Cloth
+    4300002: Head
+    4300004: Pants_Cloth
+    4300006: Pants_Body
+    4300008: Model_Cloth1
+    4300010: Head_Hair_Cloth
+    4300012: Head_Hair
+    4300014: Cuff_Body
+    4300016: Cuff
+    4300018: Tunic_Cloth
+    4300020: Tunic_Body
+    4300022: Eyes
+    4300024: Eyelash
+    4300026: Face
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -7,7 +7,9 @@
 		_Glossiness("Smoothness", Range(0.0, 1.0)) = 0.5 //光泽度(1-Roughness)，与常见的粗糙度等价，只是数值上更为直观，值越小越粗糙
 		[Gamma] _Metallic("Metallic", Range(0.0, 1.0)) = 0.0 //金属度，这两个值只有在没有_MetallicGlossMap贴图的情况下生效
 		_MetallicGlossMap("Metallic", 2D) = "white" {}	//金属度与光泽度贴图，金属度在r通道上，光泽度在a通道上
-
+		_FresnelScale ("Fresnel Scale", Range(0, 1)) = 0.5
+		_FresnelPower ("Fresnel Power", Range(0, 1)) = 0.2
+		_Cubemap ("Reflection CubeMap", Cube) = "_SkyBox" {} 
 		//这边的输出 = (PBSResult * _Realistic + Texture * _RawTexture) * _Power
 		//通过控制Realistic来调节物理渲染的影响程度，控制RawTexture来提亮整体的颜色，提高对比度
 		//Realistic = 1，RawTexture = 0时为纯物理渲染的结果
@@ -28,7 +30,7 @@
 		Pass{
 			Tags 
 			{
-				"Queue" = "Geometry+11"
+				"Queue" = "Geometry" "LightMode" = "ForwardBase"
 			}
 			CGPROGRAM
 			//#pragma vertex vert
@@ -68,6 +70,10 @@
 			half4 		_EmissionColor;
 			sampler2D	_EmissionMap;
 
+			fixed _FresnelScale;
+			fixed _FresnelPower;
+			samplerCUBE _Cubemap;
+
 			//自己添加的参数
 			fixed	_MixPower;
 			fixed4	_MixColor;
@@ -98,19 +104,12 @@
 				half4 tangentToWorldAndParallax[3]	: TEXCOORD2;	// [3x3:tangentToWorld | 1x3:viewDirForParallax]
 				half4 ambientOrLightmapUV			: TEXCOORD5;	// SH or Lightmap UV
 //				SHADOW_COORDS(6)
-//				UNITY_FOG_COORDS(7)
+				UNITY_FOG_COORDS(6)
+				half3 reflUVW				: TEXCOORD7;
 //
 //					// next ones would not fit into SM2.0 limits, but they are always for SM3.0+
 //#if UNITY_SPECCUBE_BOX_PROJECTION
 //					float3 posWorld					: TEXCOORD8;
-//#endif
-//
-//#if UNITY_OPTIMIZE_TEXCUBELOD
-//	#if UNITY_SPECCUBE_BOX_PROJECTION
-//					half3 reflUVW				: TEXCOORD9;
-//	#else
-//					half3 reflUVW				: TEXCOORD8;
-//	#endif
 //#endif
 			};
 
@@ -142,33 +141,13 @@
 				half oneMinusReflectivity, oneMinusRoughness;
 				half3 normalWorld, eyeVec, posWorld;
 				half alpha;
-
-			#if UNITY_OPTIMIZE_TEXCUBELOD || UNITY_STANDARD_SIMPLE
 				half3 reflUVW;
-			#endif
 
 			#if UNITY_STANDARD_SIMPLE
 				half3 tangentSpaceNormal;
 			#endif
 			};
 
-			//inline half OneMinusReflectivityFromMetallic(half metallic)
-			//{
-			//	// We'll need oneMinusReflectivity, so
-			//	//   1-reflectivity = 1-lerp(dielectricSpec, 1, metallic) = lerp(1-dielectricSpec, 0, metallic)
-			//	// store (1-dielectricSpec) in unity_ColorSpaceDielectricSpec.a, then
-			//	//	 1-reflectivity = lerp(alpha, 0, metallic) = alpha + metallic*(0 - alpha) = 
-			//	//                  = alpha - metallic * alpha
-			//	half oneMinusDielectricSpec = unity_ColorSpaceDielectricSpec.a;
-			//	return oneMinusDielectricSpec - metallic * oneMinusDielectricSpec;
-			//}
-
-			//inline half3 DiffuseAndSpecularFromMetallic (half3 albedo, half metallic, out half3 specColor, out half oneMinusReflectivity)
-			//{
-			//	specColor = lerp (unity_ColorSpaceDielectricSpec.rgb, albedo, metallic);
-			//	oneMinusReflectivity = OneMinusReflectivityFromMetallic(metallic);
-			//	return albedo * oneMinusReflectivity;
-			//}
 			#define UNITY_SETUP_BRDF_INPUT MetallicSetup
 			inline FragmentCommonData MetallicSetup (float4 i_tex)
 			{
@@ -251,24 +230,6 @@
 				return normalize(n);
 			}
 
-//			half3 NormalizePerVertexNormal(float3 n) // takes float to avoid overflow
-//			{
-//#if (SHADER_TARGET < 30) || UNITY_STANDARD_SIMPLE
-//				return normalize(n);
-//#else
-//				return n; // will normalize per-pixel instead
-//#endif
-//			}
-
-//			half3 NormalizePerPixelNormal(half3 n)
-//			{
-//#if (SHADER_TARGET < 30) || UNITY_STANDARD_SIMPLE
-//				return n;
-//#else
-//				return normalize(n);
-//#endif
-//			}
-
 			inline half4 VertexGIForward(VertexInput v, float3 posWorld, half3 normalWorld)
 			{
 				half4 ambientOrLightmapUV = 0;
@@ -317,16 +278,6 @@
 				half3 binormal = tangentToWorld[1].xyz;
 				half3 normal = tangentToWorld[2].xyz;
 
-//#if UNITY_TANGENT_ORTHONORMALIZE
-//				normal = NormalizePerPixelNormal(normal);
-//
-//				// ortho-normalize Tangent
-//				tangent = normalize(tangent - normal * dot(tangent, normal));
-//
-//				// recalculate Binormal
-//				half3 newB = cross(normal, tangent);
-//				binormal = newB * sign(dot(newB, binormal));
-//#endif
 				half3 normalTangent = NormalInTangentSpace(i_tex);
 				half3 normalWorld = NormalizePerPixelNormal(tangent * normalTangent.x + binormal * normalTangent.y + normal * normalTangent.z); // @TODO: see if we can squeeze this normalize on SM2.0 as well
 				return normalWorld;
@@ -340,7 +291,6 @@
 #if defined(_ALPHATEST_ON)
 				clip(alpha - _Cutoff);
 #endif
-
 				FragmentCommonData o = UNITY_SETUP_BRDF_INPUT(i_tex);
 				o.normalWorld = PerPixelWorldNormal(i_tex, tangentToWorld);
 				o.eyeVec = NormalizePerPixelNormal(i_eyeVec);
@@ -389,10 +339,7 @@
 				TRANSFER_SHADOW(o);
 
 				o.ambientOrLightmapUV = VertexGIForward(v, posWorld, normalWorld);
-
-#if UNITY_OPTIMIZE_TEXCUBELOD
 				o.reflUVW = reflect(o.eyeVec, normalWorld);
-#endif
 
 				UNITY_TRANSFER_FOG(o, o.pos);
 				return o;
@@ -432,9 +379,7 @@
 			half4 fragForwardBaseInternal(VertexOutputForwardBase i)  
 			{
 				FRAGMENT_SETUP(s)
-#if UNITY_OPTIMIZE_TEXCUBELOD
 				s.reflUVW = i.reflUVW;
-#endif
 				UnityLight mainLight = MainLight(s.normalWorld);
 				half atten = SHADOW_ATTENUATION(i);
 
@@ -448,7 +393,11 @@
 				half4 tex = tex2D(_MainTex, i.tex.xy);
 				//half4 tex = half4(s.diffColor, 1.0f);//这个颜色经过了
 				//c = lerp(c, tex, _Realistic);
-
+				fixed3 reflection = texCUBE(_Cubemap, s.reflUVW).rgb;
+				fixed fresnel = _FresnelScale + (1 - _FresnelScale) * pow(1 - dot(-s.eyeVec, s.normalWorld), 5);
+				c.rgb = lerp(c.rgb,reflection,saturate(fresnel)*_FresnelPower);//saturate(fresnel)
+				//c.rgb = c.rgb + reflection * saturate(fresnel) * _FresnelPower;//saturate(fresnel)
+				//return c;
 				//这里如果_Realistic = 0,_Power = 1,则结果为默认的PBS渲染结果
 				c = (c * _Realistic + tex * _RawTexture) * _Power;
 				UNITY_APPLY_FOG(i.fogCoord, c.rgb);
